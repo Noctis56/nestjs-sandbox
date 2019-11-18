@@ -3,6 +3,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import * as fastifyRateLimit from 'fastify-rate-limit';
+import * as helmet from 'helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
@@ -11,6 +13,13 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+
+  app.use(helmet());
+
+  app.register(fastifyRateLimit, {
+    max: 10,
+    timeWindow: '1 minute'
+  })
 
   const options = new DocumentBuilder()
     .setTitle('Users example')

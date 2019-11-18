@@ -27,12 +27,15 @@
     "@nestjs/swagger": "^3.1.0",
     "cache-manager": "^2.10.0",
     "compression": "^1.7.4",
+    "fastify-rate-limit": "^2.4.0",
     "fastify-swagger": "^2.4.0",
+    "helmet": "^3.21.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/cli": "^6.9.0",
     "@nestjs/schematics": "^6.7.0",
     "@nestjs/testing": "^6.7.1",
