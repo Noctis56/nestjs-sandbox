@@ -7,12 +7,15 @@ import * as fastifyRateLimit from 'fastify-rate-limit';
 import * as helmet from 'helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common/pipes';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
   );
+
+  app.useGlobalPipes(new ValidationPipe());
 
   app.use(helmet());
 
