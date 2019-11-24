@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "login": "Noctis56",
+        "password": "azerty123",
+        "email": "test1@test.fr"
+    },
+    {
+        "id": 2,
+        "login": "Ricko56",
+        "password": "toto123",
+        "email": "test2@test.fr"
+    },
+    {
+        "id": 3,
+        "login": "FloDu56",
+        "password": "123",
+        "email": "test3@test.fr"
+    }
+]

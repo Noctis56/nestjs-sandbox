@@ -20,7 +20,7 @@ async function bootstrap() {
   app.use(helmet());
 
   app.register(fastifyRateLimit, {
-    max: 10,
+    max: 1000,
     timeWindow: '1 minute'
   })
 

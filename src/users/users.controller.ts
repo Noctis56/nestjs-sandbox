@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete, ParseIntPipe, HttpException, HttpStatus, HttpCode } from '@nestjs/common';
 import { UserDto } from './user.dto';
 import { UsersService } from './users.service';
 import { ApiUseTags, ApiCreatedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 
 @ApiUseTags('users')
-@Controller('users')
+@Controller('api/v1/users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
@@ -14,25 +14,53 @@ export class UsersController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        console.log(id);
-        return `This action returns a #${id} user`;
+    findOne(@Param('id', new ParseIntPipe()) id: number) {
+        const user: UserDto = this.usersService.findOneById(id);
+        if (user === undefined) {
+            throw new HttpException(
+                `Cannot find a product with id ${id}`,
+                HttpStatus.NOT_FOUND,
+            );
+        }
+        return user;
     }
 
     @Post()
     @ApiCreatedResponse({ description: 'The record has been successfully created.', type: UserDto })
     @ApiForbiddenResponse({ description: 'Forbidden.'})
     async create(@Body() userDto: UserDto) {
-        this.usersService.create(userDto);
+        if (this.usersService.findAll().length > 5) {
+            throw new HttpException(
+                `Too much products added!`,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+        this.usersService.add(userDto);
+        return userDto;
     }
 
-    @Put(':id')
-    update(@Param('id') id: string, @Body() userDto: UserDto) {
-        return `This action updates a #${id} cat`;
+    @Put()
+    update(@Body() userToUpdate: UserDto) {
+        const findUser: UserDto = this.usersService.findOneById(userToUpdate.id);
+        if (findUser === undefined) {
+            throw new HttpException(
+                `Cannot find a product with id ${userToUpdate.id}`,
+                HttpStatus.NOT_FOUND,
+            );
+        }
+        return this.usersService.update(userToUpdate);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return `This action removes a #${id} cat`;
+    @HttpCode(204)
+    remove(@Param('id', new ParseIntPipe()) id: number) {
+        const findUser: UserDto = this.usersService.findOneById(id);
+        if (findUser === undefined) {
+            throw new HttpException(
+                `Cannot find a product with id ${id}`,
+                HttpStatus.NOT_FOUND,
+            );
+        }
+        this.usersService.delete(id);
     }
 }
