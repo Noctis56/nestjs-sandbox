@@ -19,6 +19,8 @@ async function bootstrap() {
 
   app.use(helmet());
 
+  app.enableCors();
+
   app.register(fastifyRateLimit, {
     max: 1000,
     timeWindow: '1 minute'
