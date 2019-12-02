@@ -14,7 +14,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    findOne(@Param('id', new ParseIntPipe()) id: number) {
+    async findOne(@Param('id', new ParseIntPipe()) id: number) {
         const user: UserDto = this.usersService.findOneById(id);
         if (user === undefined) {
             throw new HttpException(
@@ -40,7 +40,7 @@ export class UsersController {
     }
 
     @Put()
-    update(@Body() userToUpdate: UserDto) {
+    async update(@Body() userToUpdate: UserDto) {
         const findUser: UserDto = this.usersService.findOneById(userToUpdate.id);
         if (findUser === undefined) {
             throw new HttpException(
@@ -53,7 +53,7 @@ export class UsersController {
 
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id', new ParseIntPipe()) id: number) {
+    async remove(@Param('id', new ParseIntPipe()) id: number) {
         const findUser: UserDto = this.usersService.findOneById(id);
         if (findUser === undefined) {
             throw new HttpException(
